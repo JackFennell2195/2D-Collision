@@ -52,9 +52,11 @@ int main()
 	aabb_player.max = c2V(animated_sprite.getGlobalBounds().width / animated_sprite.getFrames().size(), 
 		animated_sprite.getGlobalBounds().height / animated_sprite.getFrames().size());
 
+	
 
 	// Setup the Player
 	Player player(animated_sprite);
+
 	Input input;
 
 	// Collision result
@@ -65,7 +67,7 @@ int main()
 	{
 		// Move Sprite Follow Mouse
 		mouse.setPosition(window.mapPixelToCoords(sf::Mouse::getPosition(window)));
-
+		
 		// Update mouse AABB
 		aabb_mouse.min = c2V(mouse.getPosition().x, mouse.getPosition().y);
 		aabb_mouse.max = c2V(mouse.getGlobalBounds().width, mouse.getGlobalBounds().width);
