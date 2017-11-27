@@ -32,16 +32,26 @@ int main()
 	// Setup a mouse Sprite
 	sf::Sprite mouse;
 	mouse.setTexture(mouse_texture);
+	int setMouse = 0;
+	
 
+	
 	//Setup mouse AABB
 	c2AABB aabb_mouse;
 	aabb_mouse.min = c2V(mouse.getPosition().x, mouse.getPosition().y);
 	aabb_mouse.max = c2V(mouse.getGlobalBounds().width, mouse.getGlobalBounds().width);
-
 	
+	//Setup mouse circle
+	c2Circle circle_mouse;
+	circle_mouse.p = c2V(mouse.getPosition().x,mouse.getPosition().y);
+	circle_mouse.r = 42;
 	
-
-
+	//Setup mouse ray
+	c2Ray ray_mouse;
+	ray_mouse.d = c2Norm(c2V(mouse.getPosition().x, mouse.getPosition().y));
+	ray_mouse.p = c2V(mouse.getPosition().x, mouse.getPosition().y);
+	ray_mouse.t = c2Len(c2V(mouse.getPosition().x, mouse.getPosition().y));
+	
 	// Setup Players Default Animated Sprite
 	//AABB
 	AnimatedSprite animated_sprite(sprite_sheet);
@@ -86,7 +96,8 @@ int main()
 	c2Capsule capsule_player;
 	capsule_player.a = c2V(capsuleAnimated_sprite.getPosition().x, capsuleAnimated_sprite.getPosition().y);
 	capsule_player.b = c2V(capsuleAnimated_sprite.getPosition().x, capsuleAnimated_sprite.getPosition().y);
-	capsule_player.r = 15;
+	capsule_player.r = 5.0f;
+	
 
 	//Setup Players Poly
 	c2Poly poly_player;
@@ -108,7 +119,7 @@ int main()
 	ray_player.t = c2Len(c2V(animated_sprite.getPosition().x, animated_sprite.getPosition().y));
 
 	// Setup the Player
-	Player player(animated_sprite);
+	Player aabb(animated_sprite);
 	Player circle(circleAnimated_sprite);
 	Player capsule(capsuleAnimated_sprite);
 
@@ -116,10 +127,24 @@ int main()
 	Input input;
 
 	// Collision result
+
 	//AABB Mouse collisions
 	int result = 0;
 	int result1 = 0;
 	int result2 = 0;
+	
+	//Circle Mouse collisions
+	int result3 = 0;
+	int result4 = 0;
+	int result5 = 0;
+	int result6 = 0;
+	int result7 = 0;
+	
+	//Ray Mouse collisions
+	int result8 = 0;
+	int result9 = 0;
+	int result10 = 0;
+	int result11 = 0;
 	
 	
 	
@@ -140,76 +165,93 @@ int main()
 			switch (event.type)
 			{
 			case sf::Event::Closed:
-				// Close window : exit
 				window.close();
 				break;
 			case sf::Event::KeyPressed:
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 				{
-					input.setCurrent(Input::Action::LEFT);
+					
 				}
 				else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 				{
-					input.setCurrent(Input::Action::RIGHT);
+					
 				}
 				else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 				{
-					input.setCurrent(Input::Action::UP);
+					
 				}
 				break;
 			default:
-				input.setCurrent(Input::Action::IDLE);
 				break;
 			}
 		}
 
 		// Handle input to Player
-		player.handleInput(input);
+		aabb.handleInput(input);
 		circle.handleInput(input);
 		capsule.handleInput(input);
 
 		// Update the Player
-		player.update();
+		aabb.update();
 		circle.update();
 		capsule.update();
 
 		// Check for collisions
-
+		//AABB Mouse to AABB Player
 		result = c2AABBtoAABB(aabb_mouse, aabb_player);
 		cout << ((result != 0) ? ("Collision") : "") << endl;
 		if (result){
-			player.getAnimatedSprite().setColor(sf::Color(255,0,0));
+			aabb.getAnimatedSprite().setColor(sf::Color(255,0,0));
 		}
 		else {
-			player.getAnimatedSprite().setColor(sf::Color(0, 255, 0));
+			aabb.getAnimatedSprite().setColor(sf::Color(0, 255, 0));
 		}
-
-		result1 = c2CircletoAABB(circle_player, aabb_mouse );
+		//AABB Mouse to Capsule Player
+		result1 = c2AABBtoCapsule(aabb_mouse, capsule_player);
 		cout << ((result1 != 0) ? ("Collision") : "") << endl;
 		if (result1) {
-			circle.getAnimatedSprite().setColor(sf::Color(255, 0, 0));
+			aabb.getAnimatedSprite().setColor(sf::Color(255, 0, 0));
 		}
 		else {
-			circle.getAnimatedSprite().setColor(sf::Color(0, 255, 0));
+			aabb.getAnimatedSprite().setColor(sf::Color(0, 255, 0));
 		}
+		
 
-		result2 = c2AABBtoCapsule(aabb_mouse,capsule_player);
-		cout << ((result2 != 0) ? ("Collision") : "") << endl;
-		if (result2) {
-			capsule.getAnimatedSprite().setColor(sf::Color(255, 0, 0));
-		}
-		else {
-			capsule.getAnimatedSprite().setColor(sf::Color(0, 255, 0));
-		}
+
+		////Circle Mouse to AABB Player
+		//result3 = c2CircletoAABB(circle_mouse, aabb_player);
+		//cout << ((result3 != 0) ? ("Collision") : "") << endl;
+		//if (result3) {
+		//	aabb.getAnimatedSprite().setColor(sf::Color(255, 0, 0));
+		//}
+		//else {
+		//	aabb.getAnimatedSprite().setColor(sf::Color(0, 255, 0));
+		//}
+
+		////Ray Mouse to AABB Player
+		//result8 = c2RaytoAABB(ray_mouse, aabb_player);
+		//cout << ((result3 != 0) ? ("Collision") : "") << endl;
+		//if (result3) {
+		//	aabb.getAnimatedSprite().setColor(sf::Color(255, 0, 0));
+		//}
+		//else {
+		//	aabb.getAnimatedSprite().setColor(sf::Color(0, 255, 0));
+		//}
+
+
+
+
+
 
 
 		// Clear screen
 		window.clear();
 
 		// Draw the Players Current Animated Sprite
-		window.draw(player.getAnimatedSprite());
+		window.draw(aabb.getAnimatedSprite());
 		window.draw(circle.getAnimatedSprite());
 		window.draw(capsule.getAnimatedSprite());
+
 		window.draw(mouse);
 
 		// Update the window
