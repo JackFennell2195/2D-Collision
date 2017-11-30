@@ -14,6 +14,8 @@ int main()
 {
 	// Create the main window
 	sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");
+	int currentPlayer = 0;
+	int currentMouse = 0;
 
 	// Load a sprite to display
 	sf::Texture sprite_sheet;
@@ -36,26 +38,30 @@ int main()
 	
 
 	
-	//Setup mouse AABB
+	//Set up Mouse
+
+	//AABB
 	c2AABB aabb_mouse;
 	aabb_mouse.min = c2V(mouse.getPosition().x, mouse.getPosition().y);
 	aabb_mouse.max = c2V(mouse.getGlobalBounds().width, mouse.getGlobalBounds().width);
 	
-	//Setup mouse circle
+	//Circle
 	c2Circle circle_mouse;
 	circle_mouse.p = c2V(mouse.getPosition().x,mouse.getPosition().y);
 	circle_mouse.r = 42;
 	
-	//Setup mouse ray
+	//Ray
 	c2Ray ray_mouse;
 	ray_mouse.d = c2Norm(c2V(mouse.getPosition().x, mouse.getPosition().y));
 	ray_mouse.p = c2V(mouse.getPosition().x, mouse.getPosition().y);
 	ray_mouse.t = c2Len(c2V(mouse.getPosition().x, mouse.getPosition().y));
 	
+
+
 	// Setup Players Default Animated Sprite
+	
 	//AABB
 	AnimatedSprite animated_sprite(sprite_sheet);
-	
 	animated_sprite.addFrame(sf::IntRect(3, 3, 84, 84));
 	animated_sprite.addFrame(sf::IntRect(88, 3, 84, 84));
 	animated_sprite.addFrame(sf::IntRect(173, 3, 84, 84));
@@ -65,8 +71,6 @@ int main()
 
 	//Circle
 	AnimatedSprite circleAnimated_sprite(sprite_sheet);
-	circleAnimated_sprite.setPosition(758, 42);
-
 	circleAnimated_sprite.addFrame(sf::IntRect(3, 88, 84, 84));
 	circleAnimated_sprite.addFrame(sf::IntRect(88, 88, 84, 84));
 	circleAnimated_sprite.addFrame(sf::IntRect(173, 88, 84, 84));
@@ -76,8 +80,6 @@ int main()
 
 	//Capsule
 	AnimatedSprite capsuleAnimated_sprite(sprite_sheet);
-	capsuleAnimated_sprite.setPosition(400, 400);
-
 	capsuleAnimated_sprite.addFrame(sf::IntRect(3, 173, 84, 84));
 	capsuleAnimated_sprite.addFrame(sf::IntRect(88, 173, 84, 84));
 	capsuleAnimated_sprite.addFrame(sf::IntRect(173, 173, 84, 84));
@@ -85,68 +87,73 @@ int main()
 	capsuleAnimated_sprite.addFrame(sf::IntRect(343, 173, 84, 84));
 	capsuleAnimated_sprite.addFrame(sf::IntRect(428, 173, 84, 84));
 	
+	//Polygon
+	AnimatedSprite polyAnimated_sprite(sprite_sheet);
+	polyAnimated_sprite.addFrame(sf::IntRect(3, 258, 84, 84));
+	polyAnimated_sprite.addFrame(sf::IntRect(88, 258, 84, 84));
+	polyAnimated_sprite.addFrame(sf::IntRect(173, 258, 84, 84));
+	polyAnimated_sprite.addFrame(sf::IntRect(258, 258, 84, 84));
+	polyAnimated_sprite.addFrame(sf::IntRect(343, 258, 84, 84));
+	polyAnimated_sprite.addFrame(sf::IntRect(428, 258, 84, 84));
 
-	// Setup Players AABB
+	//Ray
+	AnimatedSprite rayAnimated_sprite(sprite_sheet);
+	rayAnimated_sprite.addFrame(sf::IntRect(3, 343, 84, 84));
+	rayAnimated_sprite.addFrame(sf::IntRect(88, 343, 84, 84));
+	rayAnimated_sprite.addFrame(sf::IntRect(173, 343, 84, 84));
+	rayAnimated_sprite.addFrame(sf::IntRect(258, 343, 84, 84));
+	rayAnimated_sprite.addFrame(sf::IntRect(343, 343, 84, 84));
+	rayAnimated_sprite.addFrame(sf::IntRect(428, 343, 84, 84));
+
+
+	//Setup Players
+
+	//AABB
 	c2AABB aabb_player;
 	aabb_player.min = c2V(animated_sprite.getPosition().x, animated_sprite.getPosition().y);
 	aabb_player.max = c2V(animated_sprite.getGlobalBounds().width / animated_sprite.getFrames().size(), 
 		animated_sprite.getGlobalBounds().height / animated_sprite.getFrames().size());
 
-	//Setup Players Capsule
+	//Capsule
 	c2Capsule capsule_player;
-	capsule_player.a = c2V(capsuleAnimated_sprite.getPosition().x, capsuleAnimated_sprite.getPosition().y);
-	capsule_player.b = c2V(capsuleAnimated_sprite.getPosition().x, capsuleAnimated_sprite.getPosition().y);
-	capsule_player.r = 5.0f;
+	capsule_player.a = c2V(capsuleAnimated_sprite.getPosition().x + 8, capsuleAnimated_sprite.getPosition().y + 21);
+	capsule_player.b = c2V(capsuleAnimated_sprite.getPosition().x + 55, capsuleAnimated_sprite.getPosition().y + 21);
+	capsule_player.r = 21.0f;
 	
 
-	//Setup Players Poly
+	//Poly
 	c2Poly poly_player;
-	poly_player.count = 5;
+	poly_player.count = 4;
 	poly_player.norms;
-	poly_player.verts;
-
-
-	//Setup Players Circle
+	poly_player.verts[0] = { 20 };
+	poly_player.verts[1] = { 20 };
+	poly_player.verts[2] = { 20 };
+	poly_player.verts[3] = { 20 };
+	//Circle
 	c2Circle circle_player;
-	circle_player.p = c2V(circleAnimated_sprite.getPosition().x, circleAnimated_sprite.getPosition().y);
+	circle_player.p = c2V(circleAnimated_sprite.getPosition().x+42, circleAnimated_sprite.getPosition().y+42);
 	circle_player.r = 42.0f;
-	circleAnimated_sprite.setOrigin(circle_player.r,circle_player.r);
+	
 
-	//Setup Players Ray
+	//Ray
 	c2Ray ray_player;
 	ray_player.d = c2Norm(c2V(animated_sprite.getPosition().x, animated_sprite.getPosition().y));
 	ray_player.p = c2V(animated_sprite.getPosition().x, animated_sprite.getPosition().y);
 	ray_player.t = c2Len(c2V(animated_sprite.getPosition().x, animated_sprite.getPosition().y));
 
+
 	// Setup the Player
 	Player aabb(animated_sprite);
 	Player circle(circleAnimated_sprite);
 	Player capsule(capsuleAnimated_sprite);
+	Player ray(rayAnimated_sprite);
+	Player polygon(polyAnimated_sprite);
 
 
 	Input input;
 
 	// Collision result
-
-	//AABB Mouse collisions
 	int result = 0;
-	int result1 = 0;
-	int result2 = 0;
-	
-	//Circle Mouse collisions
-	int result3 = 0;
-	int result4 = 0;
-	int result5 = 0;
-	int result6 = 0;
-	int result7 = 0;
-	
-	//Ray Mouse collisions
-	int result8 = 0;
-	int result9 = 0;
-	int result10 = 0;
-	int result11 = 0;
-	
-	
 	
 	// Start the game loop
 	while (window.isOpen())
@@ -157,6 +164,7 @@ int main()
 		// Update mouse AABB
 		aabb_mouse.min = c2V(mouse.getPosition().x, mouse.getPosition().y);
 		aabb_mouse.max = c2V(mouse.getGlobalBounds().width, mouse.getGlobalBounds().width);
+
 
 		// Process events
 		sf::Event event;
@@ -170,21 +178,47 @@ int main()
 			case sf::Event::KeyPressed:
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 				{
+					if(currentPlayer>= 0 && currentPlayer<4)
+					{
+						currentPlayer++;
+					}
 					
 				}
 				else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 				{
-					
+					if (currentPlayer > 0 && currentPlayer<=4)
+					{
+						currentPlayer--;
+					}
 				}
-				else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 				{
-					
+					if (currentMouse >= 0 && currentMouse<4)
+					{
+						currentMouse++;
+					}
+
+				}
+				else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+				{
+					if (currentMouse > 0 && currentMouse <= 4)
+					{
+						currentMouse--;
+					}
 				}
 				break;
 			default:
 				break;
 			}
 		}
+		
+		//AABB Mouse to AABB Player
+		if (currentPlayer == 0 && currentMouse == 0)
+		{
+			result = c2AABBtoAABB(aabb_mouse, aabb_player);
+		}
+
 
 		// Handle input to Player
 		aabb.handleInput(input);
@@ -197,8 +231,8 @@ int main()
 		capsule.update();
 
 		// Check for collisions
+
 		//AABB Mouse to AABB Player
-		result = c2AABBtoAABB(aabb_mouse, aabb_player);
 		cout << ((result != 0) ? ("Collision") : "") << endl;
 		if (result){
 			aabb.getAnimatedSprite().setColor(sf::Color(255,0,0));
@@ -206,37 +240,54 @@ int main()
 		else {
 			aabb.getAnimatedSprite().setColor(sf::Color(0, 255, 0));
 		}
+
 		//AABB Mouse to Capsule Player
-		result1 = c2AABBtoCapsule(aabb_mouse, capsule_player);
-		cout << ((result1 != 0) ? ("Collision") : "") << endl;
-		if (result1) {
+		cout << ((result != 0) ? ("Collision") : "") << endl;
+		if (result) {
+			capsule.getAnimatedSprite().setColor(sf::Color(255, 0, 0));
+		}
+		else {
+			capsule.getAnimatedSprite().setColor(sf::Color(0, 255, 0));
+		}
+		
+		//AABB Mouse to Polygon Player
+		cout << ((result != 0) ? ("Collision") : "") << endl;
+		if (result) {
+			polygon.getAnimatedSprite().setColor(sf::Color(255, 0, 0));
+		}
+		else {
+			polygon.getAnimatedSprite().setColor(sf::Color(0, 255, 0));
+		}
+
+		//AABB Mouse to Ray Player
+		cout << ((result != 0) ? ("Collision") : "") << endl;
+		if (result) {
+			polygon.getAnimatedSprite().setColor(sf::Color(255, 0, 0));
+		}
+		else {
+			polygon.getAnimatedSprite().setColor(sf::Color(0, 255, 0));
+		}
+
+
+
+		////Circle Mouse to AABB Player
+		cout << ((result!= 0) ? ("Collision") : "") << endl;
+		if (result) {
 			aabb.getAnimatedSprite().setColor(sf::Color(255, 0, 0));
 		}
 		else {
 			aabb.getAnimatedSprite().setColor(sf::Color(0, 255, 0));
 		}
-		
 
-
-		////Circle Mouse to AABB Player
-		//result3 = c2CircletoAABB(circle_mouse, aabb_player);
-		//cout << ((result3 != 0) ? ("Collision") : "") << endl;
-		//if (result3) {
-		//	aabb.getAnimatedSprite().setColor(sf::Color(255, 0, 0));
-		//}
-		//else {
-		//	aabb.getAnimatedSprite().setColor(sf::Color(0, 255, 0));
-		//}
 
 		////Ray Mouse to AABB Player
-		//result8 = c2RaytoAABB(ray_mouse, aabb_player);
-		//cout << ((result3 != 0) ? ("Collision") : "") << endl;
-		//if (result3) {
-		//	aabb.getAnimatedSprite().setColor(sf::Color(255, 0, 0));
-		//}
-		//else {
-		//	aabb.getAnimatedSprite().setColor(sf::Color(0, 255, 0));
-		//}
+		cout << ((result != 0) ? ("Collision") : "") << endl;
+		if (result) {
+			aabb.getAnimatedSprite().setColor(sf::Color(255, 0, 0));
+		}
+		else {
+			aabb.getAnimatedSprite().setColor(sf::Color(0, 255, 0));
+		}
 
 
 
@@ -248,10 +299,13 @@ int main()
 		window.clear();
 
 		// Draw the Players Current Animated Sprite
-		window.draw(aabb.getAnimatedSprite());
-		window.draw(circle.getAnimatedSprite());
-		window.draw(capsule.getAnimatedSprite());
-
+		
+			window.draw(aabb.getAnimatedSprite());
+		
+			window.draw(circle.getAnimatedSprite());
+		
+			window.draw(capsule.getAnimatedSprite());
+		
 		window.draw(mouse);
 
 		// Update the window
