@@ -25,15 +25,33 @@ int main()
 	}
 
 	// Load a mouse texture to display
-	sf::Texture mouse_texture;
-	if (!mouse_texture.loadFromFile("assets\\mouse.png")) {
+	sf::Texture AABBMouse_texture;
+	if (!AABBMouse_texture.loadFromFile("assets\\AABBMouse.png")) {
+		DEBUG_MSG("Failed to load file");
+		return EXIT_FAILURE;
+	}
+
+	sf::Texture CircleMouse_texture;
+	if (!CircleMouse_texture.loadFromFile("assets\\CircleMouse.png")) {
+		DEBUG_MSG("Failed to load file");
+		return EXIT_FAILURE;
+	}
+
+	sf::Texture RayMouse_texture;
+	if (!RayMouse_texture.loadFromFile("assets\\RayMouse.png")) {
 		DEBUG_MSG("Failed to load file");
 		return EXIT_FAILURE;
 	}
 
 	// Setup a mouse Sprite
-	sf::Sprite mouse;
-	mouse.setTexture(mouse_texture);
+	sf::Sprite AABBMouse;
+	sf::Sprite CircleMouse;
+	sf::Sprite RayMouse;
+
+	AABBMouse.setTexture(AABBMouse_texture);
+	CircleMouse.setTexture(CircleMouse_texture);
+	RayMouse.setTexture(RayMouse_texture);
+
 	int setMouse = 0;
 	
 
@@ -42,19 +60,19 @@ int main()
 
 	//AABB
 	c2AABB aabb_mouse;
-	aabb_mouse.min = c2V(mouse.getPosition().x, mouse.getPosition().y);
-	aabb_mouse.max = c2V(mouse.getGlobalBounds().width, mouse.getGlobalBounds().width);
+	aabb_mouse.min = c2V(AABBMouse.getPosition().x, AABBMouse.getPosition().y);
+	aabb_mouse.max = c2V(AABBMouse.getGlobalBounds().width/6, AABBMouse.getGlobalBounds().width/6);
 	
 	//Circle
 	c2Circle circle_mouse;
-	circle_mouse.p = c2V(mouse.getPosition().x,mouse.getPosition().y);
+	circle_mouse.p = c2V(CircleMouse.getPosition().x, CircleMouse.getPosition().y);
 	circle_mouse.r = 42;
 	
 	//Ray
 	c2Ray ray_mouse;
-	ray_mouse.d = c2Norm(c2V(mouse.getPosition().x, mouse.getPosition().y));
-	ray_mouse.p = c2V(mouse.getPosition().x, mouse.getPosition().y);
-	ray_mouse.t = c2Len(c2V(mouse.getPosition().x, mouse.getPosition().y));
+	ray_mouse.d = c2Norm(c2V(RayMouse.getPosition().x, RayMouse.getPosition().y));
+	ray_mouse.p = c2V(RayMouse.getPosition().x, RayMouse.getPosition().y);
+	ray_mouse.t = c2Len(c2V(RayMouse.getPosition().x, RayMouse.getPosition().y));
 	
 
 
@@ -71,39 +89,39 @@ int main()
 
 	//Circle
 	AnimatedSprite circleAnimated_sprite(sprite_sheet);
-	circleAnimated_sprite.addFrame(sf::IntRect(3, 88, 84, 84));
-	circleAnimated_sprite.addFrame(sf::IntRect(88, 88, 84, 84));
-	circleAnimated_sprite.addFrame(sf::IntRect(173, 88, 84, 84));
-	circleAnimated_sprite.addFrame(sf::IntRect(258, 88, 84, 84));
-	circleAnimated_sprite.addFrame(sf::IntRect(343, 88, 84, 84));
-	circleAnimated_sprite.addFrame(sf::IntRect(428, 88, 84, 84));
+	circleAnimated_sprite.addFrame(sf::IntRect(3, 343, 84, 84));
+	circleAnimated_sprite.addFrame(sf::IntRect(88, 343, 84, 84));
+	circleAnimated_sprite.addFrame(sf::IntRect(173, 343, 84, 84));
+	circleAnimated_sprite.addFrame(sf::IntRect(258, 343, 84, 84));
+	circleAnimated_sprite.addFrame(sf::IntRect(343, 343, 84, 84));
+	circleAnimated_sprite.addFrame(sf::IntRect(428, 343, 84, 84));
 
 	//Capsule
 	AnimatedSprite capsuleAnimated_sprite(sprite_sheet);
-	capsuleAnimated_sprite.addFrame(sf::IntRect(3, 173, 84, 84));
-	capsuleAnimated_sprite.addFrame(sf::IntRect(88, 173, 84, 84));
-	capsuleAnimated_sprite.addFrame(sf::IntRect(173, 173, 84, 84));
-	capsuleAnimated_sprite.addFrame(sf::IntRect(258, 173, 84, 84));
-	capsuleAnimated_sprite.addFrame(sf::IntRect(343, 173, 84, 84));
-	capsuleAnimated_sprite.addFrame(sf::IntRect(428, 173, 84, 84));
+	capsuleAnimated_sprite.addFrame(sf::IntRect(3, 88, 84, 84));
+	capsuleAnimated_sprite.addFrame(sf::IntRect(88, 88, 84, 84));
+	capsuleAnimated_sprite.addFrame(sf::IntRect(173, 88, 84, 84));
+	capsuleAnimated_sprite.addFrame(sf::IntRect(258, 88, 84, 84));
+	capsuleAnimated_sprite.addFrame(sf::IntRect(343, 88, 84, 84));
+	capsuleAnimated_sprite.addFrame(sf::IntRect(428, 88, 84, 84));
 	
 	//Polygon
 	AnimatedSprite polyAnimated_sprite(sprite_sheet);
-	polyAnimated_sprite.addFrame(sf::IntRect(3, 258, 84, 84));
-	polyAnimated_sprite.addFrame(sf::IntRect(88, 258, 84, 84));
-	polyAnimated_sprite.addFrame(sf::IntRect(173, 258, 84, 84));
-	polyAnimated_sprite.addFrame(sf::IntRect(258, 258, 84, 84));
-	polyAnimated_sprite.addFrame(sf::IntRect(343, 258, 84, 84));
-	polyAnimated_sprite.addFrame(sf::IntRect(428, 258, 84, 84));
+	polyAnimated_sprite.addFrame(sf::IntRect(3, 173, 84, 84));
+	polyAnimated_sprite.addFrame(sf::IntRect(88, 173, 84, 84));
+	polyAnimated_sprite.addFrame(sf::IntRect(173, 173, 84, 84));
+	polyAnimated_sprite.addFrame(sf::IntRect(258, 173, 84, 84));
+	polyAnimated_sprite.addFrame(sf::IntRect(343, 173, 84, 84));
+	polyAnimated_sprite.addFrame(sf::IntRect(428, 173, 84, 84));
 
 	//Ray
 	AnimatedSprite rayAnimated_sprite(sprite_sheet);
-	rayAnimated_sprite.addFrame(sf::IntRect(3, 343, 84, 84));
-	rayAnimated_sprite.addFrame(sf::IntRect(88, 343, 84, 84));
-	rayAnimated_sprite.addFrame(sf::IntRect(173, 343, 84, 84));
-	rayAnimated_sprite.addFrame(sf::IntRect(258, 343, 84, 84));
-	rayAnimated_sprite.addFrame(sf::IntRect(343, 343, 84, 84));
-	rayAnimated_sprite.addFrame(sf::IntRect(428, 343, 84, 84));
+	rayAnimated_sprite.addFrame(sf::IntRect(3, 258, 84, 84));
+	rayAnimated_sprite.addFrame(sf::IntRect(88, 258, 84, 84));
+	rayAnimated_sprite.addFrame(sf::IntRect(173, 258, 84, 84));
+	rayAnimated_sprite.addFrame(sf::IntRect(258, 258, 84, 84));
+	rayAnimated_sprite.addFrame(sf::IntRect(343, 258, 84, 84));
+	rayAnimated_sprite.addFrame(sf::IntRect(428, 258, 84, 84));
 
 
 	//Setup Players
@@ -129,6 +147,7 @@ int main()
 	poly_player.verts[1] = { 20 };
 	poly_player.verts[2] = { 20 };
 	poly_player.verts[3] = { 20 };
+
 	//Circle
 	c2Circle circle_player;
 	circle_player.p = c2V(circleAnimated_sprite.getPosition().x+42, circleAnimated_sprite.getPosition().y+42);
@@ -147,7 +166,7 @@ int main()
 	Player circle(circleAnimated_sprite);
 	Player capsule(capsuleAnimated_sprite);
 	Player ray(rayAnimated_sprite);
-	Player polygon(polyAnimated_sprite);
+	Player poly(polyAnimated_sprite);
 
 
 	Input input;
@@ -159,12 +178,22 @@ int main()
 	while (window.isOpen())
 	{
 		// Move Sprite Follow Mouse
-		mouse.setPosition(window.mapPixelToCoords(sf::Mouse::getPosition(window)));
-		
-		// Update mouse AABB
-		aabb_mouse.min = c2V(mouse.getPosition().x, mouse.getPosition().y);
-		aabb_mouse.max = c2V(mouse.getGlobalBounds().width, mouse.getGlobalBounds().width);
+		AABBMouse.setPosition(window.mapPixelToCoords(sf::Mouse::getPosition(window)));
+		CircleMouse.setPosition(window.mapPixelToCoords(sf::Mouse::getPosition(window)));
+		RayMouse.setPosition(window.mapPixelToCoords(sf::Mouse::getPosition(window)));
 
+		// Update mouse AABB
+		aabb_mouse.min = c2V(AABBMouse.getPosition().x, AABBMouse.getPosition().y);
+		aabb_mouse.max = c2V(AABBMouse.getGlobalBounds().width, AABBMouse.getGlobalBounds().width);
+
+		//Update mouse Circle
+		circle_mouse.p = c2V(AABBMouse.getPosition().x + 42, AABBMouse.getPosition().y + 42);
+		circle_mouse.r = 42.0f;
+		
+
+		ray_mouse;
+		ray_mouse;
+		ray_mouse;
 
 		// Process events
 		sf::Event event;
@@ -194,7 +223,7 @@ int main()
 
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 				{
-					if (currentMouse >= 0 && currentMouse<4)
+					if (currentMouse >= 0 && currentMouse < 2)
 					{
 						currentMouse++;
 					}
@@ -202,7 +231,7 @@ int main()
 				}
 				else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 				{
-					if (currentMouse > 0 && currentMouse <= 4)
+					if (currentMouse > 0 && currentMouse <= 2)
 					{
 						currentMouse--;
 					}
@@ -219,20 +248,91 @@ int main()
 			result = c2AABBtoAABB(aabb_mouse, aabb_player);
 		}
 
+		//AABB Mouse to Capsule Player
+		else if (currentPlayer == 1 && currentMouse == 0)
+		{
+			result = c2AABBtoCapsule(aabb_mouse, capsule_player);
+		}
 
-		// Handle input to Player
-		aabb.handleInput(input);
-		circle.handleInput(input);
-		capsule.handleInput(input);
+		//AABB Mouse to Poly Player
+		else if (currentPlayer == 2 && currentMouse == 0)
+		{
+			//result = c2AABBtoPoly(aabb_mouse, poly_player, );
+		}
+
+		//AABB Mouse to Ray Player
+		else if (currentPlayer == 3 && currentMouse == 0)
+		{
+			//result =c2RaytoAABB();
+		}
+
+		//Circle Mouse to AABB Player
+		else if (currentPlayer == 0 && currentMouse == 1)
+		{
+			result = c2CircletoAABB(circle_mouse, aabb_player);
+		}
+
+		//Circle Mouse to Capsule Player
+		else if (currentPlayer == 1 && currentMouse == 1)
+		{
+			result;
+		}
+
+		//Circle Mouse to Poly Player
+		else if (currentPlayer == 2 && currentMouse == 1)
+		{
+			result;
+		}
+
+		//Circle Mouse to Ray Player
+		else if (currentPlayer == 3 && currentMouse == 1)
+		{
+			result;
+		}
+
+		//Circle Mouse to Circle Player
+		else if (currentPlayer == 4 && currentMouse == 1)
+		{
+			result;
+		}
+
+		//Ray Mouse to AABB Player
+		else if (currentPlayer == 0 && currentMouse == 2)
+		{
+			result;
+		}
+
+		//Ray Mouse to Capsule Player
+		else if (currentPlayer == 1 && currentMouse == 2)
+		{
+			result;
+		}
+
+		//Ray Mouse to Poly Player
+		else if (currentPlayer == 2 && currentMouse == 2)
+		{
+			result;
+		}
+
+		//Ray Mouse to Circle Player
+		else if (currentPlayer == 4 && currentMouse == 2)
+		{
+			result;
+		}
+
 
 		// Update the Player
 		aabb.update();
 		circle.update();
 		capsule.update();
+		ray.update();
+		poly.update();
+
 
 		// Check for collisions
 
 		//AABB Mouse to AABB Player
+		//cout << ((result != 0) ? ("Collision") : "") << endl;
 		cout << ((result != 0) ? ("Collision") : "") << endl;
 		if (result){
 			aabb.getAnimatedSprite().setColor(sf::Color(255,0,0));
@@ -241,72 +341,46 @@ int main()
 			aabb.getAnimatedSprite().setColor(sf::Color(0, 255, 0));
 		}
 
-		//AABB Mouse to Capsule Player
-		cout << ((result != 0) ? ("Collision") : "") << endl;
-		if (result) {
-			capsule.getAnimatedSprite().setColor(sf::Color(255, 0, 0));
-		}
-		else {
-			capsule.getAnimatedSprite().setColor(sf::Color(0, 255, 0));
-		}
-		
-		//AABB Mouse to Polygon Player
-		cout << ((result != 0) ? ("Collision") : "") << endl;
-		if (result) {
-			polygon.getAnimatedSprite().setColor(sf::Color(255, 0, 0));
-		}
-		else {
-			polygon.getAnimatedSprite().setColor(sf::Color(0, 255, 0));
-		}
-
-		//AABB Mouse to Ray Player
-		cout << ((result != 0) ? ("Collision") : "") << endl;
-		if (result) {
-			polygon.getAnimatedSprite().setColor(sf::Color(255, 0, 0));
-		}
-		else {
-			polygon.getAnimatedSprite().setColor(sf::Color(0, 255, 0));
-		}
-
-
-
-		////Circle Mouse to AABB Player
-		cout << ((result!= 0) ? ("Collision") : "") << endl;
-		if (result) {
-			aabb.getAnimatedSprite().setColor(sf::Color(255, 0, 0));
-		}
-		else {
-			aabb.getAnimatedSprite().setColor(sf::Color(0, 255, 0));
-		}
-
-
-		////Ray Mouse to AABB Player
-		cout << ((result != 0) ? ("Collision") : "") << endl;
-		if (result) {
-			aabb.getAnimatedSprite().setColor(sf::Color(255, 0, 0));
-		}
-		else {
-			aabb.getAnimatedSprite().setColor(sf::Color(0, 255, 0));
-		}
-
-
-
-
-
-
-
 		// Clear screen
 		window.clear();
+		//Draw the Mouse Current Animated Sprite
+		if (currentMouse == 0)
+		{
+			
+			window.draw(AABBMouse);
+		}
+		else if (currentMouse == 1)
+		{
+			
+			window.draw(CircleMouse);
+		}
+		else if (currentMouse == 2)
+		{
+			
+			window.draw(RayMouse);
+		}
 
 		// Draw the Players Current Animated Sprite
-		
+		if (currentPlayer==0)
+		{
 			window.draw(aabb.getAnimatedSprite());
-		
-			window.draw(circle.getAnimatedSprite());
-		
+		}
+		else if (currentPlayer == 1)
+		{
 			window.draw(capsule.getAnimatedSprite());
-		
-		window.draw(mouse);
+		}
+		else if (currentPlayer == 2)
+		{
+			window.draw(poly.getAnimatedSprite());
+		}
+		else if (currentPlayer == 3)
+		{
+			window.draw(ray.getAnimatedSprite());
+		}
+		else if (currentPlayer == 4)
+		{
+			window.draw(circle.getAnimatedSprite());
+		}
 
 		// Update the window
 		window.display();
